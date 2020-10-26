@@ -1,13 +1,18 @@
+import {bemCn} from '../helpers/bem-cn';
+
 const ENTER_KEY_CODE = 13;
 const ENTER_BUTTON = 'Enter';
+const MAX_LENGTH = 50;
 const EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 type Email = {
-    text: string;
+    value: string;
     isValid: boolean;
+    displayedValue: string;
 };
 
-class EmailForm {
+const cn = bemCn('email-form');
+export class EmailForm {
     private DOMList: HTMLElement | null = null;
     private DOMInput: HTMLInputElement | null = null;
     private root: HTMLElement | null = null;
@@ -15,9 +20,9 @@ class EmailForm {
 
     constructor(root: HTMLElement) {
         this.root = root;
-        root.classList.add('email-form');
+        root.classList.add(cn());
         this.DOMList = document.createElement('div');
-        this.DOMList.classList.add('_emails-list');
+        this.DOMList.classList.add(cn('emails-list'));
         this.DOMInput = document.createElement('input');
         this.DOMInput.placeholder = 'add more people…';
         this.root.appendChild(this.DOMList);
@@ -28,14 +33,16 @@ class EmailForm {
         return this.emailsList;
     };
 
-    private setNewList = (emails: Email[]) => {
+    public setNewList = (emails: Email[]) => {
         this.emailsList = emails;
         this.render();
     };
 
     private getMailObject = (text: string): Email => {
+        const displayedValue = text.length <= MAX_LENGTH ? text : text.slice(0, 50);
         return {
-            text,
+            value: text,
+            displayedValue,
             isValid: EMAIL_REGEXP.test(text.toLowerCase()),
         };
     };
@@ -65,7 +72,6 @@ class EmailForm {
 
     private addEvents = () => {
         const input = this.DOMInput;
-        let isKeyEvent = false;
 
         if (input) {
             const setValuseFromEvent = () => {
@@ -79,7 +85,6 @@ class EmailForm {
             input.addEventListener('keyup', (event) => {
                 event.preventDefault();
                 if (this.isEnterKey(event)) {
-                    isKeyEvent = true;
                     setValuseFromEvent();
                 }
             });
@@ -106,12 +111,12 @@ class EmailForm {
         if (domList && domInput) {
             domList.innerHTML = '';
             const emails = this.getEmailsList();
-            emails.forEach(({text, isValid}, index) => {
+            emails.forEach(({displayedValue, isValid}, index) => {
                 console.log(isValid);
                 const p = document.createElement('p');
-                p.classList.add('_list-item');
-                p.classList.add(isValid ? '_valid' : '_invalid');
-                p.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
+                console.log(isValid);
+                p.className = cn('list-item', {isValid});
+                p.innerHTML = ''.concat(displayedValue, ' <span class="_cross" >&times;</span>');
                 const cross = p.querySelector('span');
                 if (cross) {
                     cross.addEventListener('click', () => {
@@ -122,9 +127,7 @@ class EmailForm {
                 domList.appendChild(p);
             });
             domList.appendChild(domInput);
+            console.log(12);
         }
     };
 }
-
-// @ts-ignore
-window.EmailForm = EmailForm;

@@ -9,37 +9,36 @@ $primary-color: rgba(102, 153, 255, 0.2);
     flex-wrap: wrap;
     font-size: 14px;
     border-radius: 5px;
+    overflow: hidden;
+    flex-direction: column;
 
-    ._emails-list {
+    &__emails-list {
         padding: 0;
         margin: 0;
         display: flex;
         flex-wrap: wrap;
+        flex: 1;
+        overflow: auto;
     }
 
-    ._list-item {
+    &__list-item {
         margin: 0.9em 0.2em;
         padding: 0.2em 0.5em;
         color: #050038;
+        border-bottom: 1px dashed red;
 
-        &._invalid {
-            border-bottom: 1px dashed red;
-        }
-
-        &._valid {
+        &._is-valid {
             background-color: $primary-color;
+            border-bottom: none;
             border-radius: 100px;
-        }
-
-        a {
-            margin: 0.5em 0.2em;
-            text-decoration: none;
-            color: inherit;
         }
     }
 
     ._cross {
         cursor: pointer;
+        margin: 0.5em 0.2em;
+        text-decoration: none;
+        color: inherit;
     }
 
     input {
@@ -51,5 +50,6 @@ $primary-color: rgba(102, 153, 255, 0.2);
         font-size: inherit;
         font-family: inherit;
         color: inherit;
+        min-width: 250px;
     }
 }
