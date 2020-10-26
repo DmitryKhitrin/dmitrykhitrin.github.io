@@ -27,7 +27,7 @@ Email Tag Forn - Test task representing a tag form for email addresses
 In order to use this form, you need to:
 
 1. Load script from 'static / bundle.js'.
-2. create an instance of the EmailForm.
+2. Create an instance of the EmailForm.
 
 # Available methods
 
@@ -43,3 +43,9 @@ const emails = string[];
 -   `EmailForm.emailWasRemoved` - called after mail has been deleted returns the deleted message.
 
 -   `EmailForm.emailWasAdded` - called after mail has been added and returns the added message.
+
+```js
+const Form = new EmailForm(container);
+const callback = () => {};
+Form.emailWasAdded(callback);
+```
