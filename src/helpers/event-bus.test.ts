@@ -10,10 +10,4 @@ describe('EventBus', () => {
         eventBus.emit('buzz');
         expect(callback).toHaveBeenCalled();
     });
-
-    test('Should throw error', () => {
-        expect(() => {
-            eventBus.emit('foo');
-        }).toThrow();
-    });
 });

@@ -50,24 +50,36 @@ export class EmailForm {
         return this.emailsList;
     };
 
+    private processMails = (emails) => {
+        return Array.isArray(emails) ? emails.map(this.getMailObject) : [this.getMailObject(emails)];
+    };
+
     public setNewList = (emails: Email[]) => {
-        this.emailsList = emails;
+        this.emailsList = this.processMails(emails);
         this.render();
     };
 
-    private getMailObject = (text: string): Email => {
-        const displayedValue = text.length <= this.settings.maxLenght ? text : `${text.slice(0, 47)}...`;
-        return {
-            value: text,
-            displayedValue,
-            isValid: EMAIL_REGEXP.test(text.toLowerCase()),
-        };
+    public getValidEmailsCount = () => {
+        return this.getEmailsList().reduce((acc, mail) => (acc += Number(mail.isValid)), 0);
+    };
+
+    private getMailObject = (email: string | Email): Email => {
+        if (typeof email !== 'object') {
+            const text = String(email);
+            const displayedValue = text.length <= this.settings.maxLenght ? text : `${text.slice(0, 47)}...`;
+            return {
+                value: text,
+                displayedValue,
+                isValid: EMAIL_REGEXP.test(text.toLowerCase()),
+            };
+        }
+        return email;
     };
 
     private addEmail = (email?: string | string[]) => {
         if (email) {
             const emailsList = this.getEmailsList();
-            const newEmail = Array.isArray(email) ? email.map(this.getMailObject) : [this.getMailObject(email)];
+            const newEmail = this.processMails(email);
             this.setNewList([...emailsList, ...newEmail]);
             this.eventBus.emit(EmailForm.EVENTS.MAIL_WASA);
         }

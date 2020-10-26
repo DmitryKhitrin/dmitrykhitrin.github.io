@@ -28,7 +28,7 @@
     "scripts": {
         "lint": "eslint . --ext .ts",
         "test": "jest",
-        "build:production": "webpack --mode production"
+        "build": "webpack --mode production"
     },
     "repository": {
         "type": "git",

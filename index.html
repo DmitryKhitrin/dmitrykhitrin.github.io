@@ -10,8 +10,8 @@
     <div id="page-sec"> </div>
     <script src="static/bundle.js"></script>
     <script>
-      const page = document.querySelector('#page-first')
-      const Form = new window.EmailForm(page);
+      const page = document.querySelector('#page-first');
+      document.myForm = new EmailForm(page);
       const pageSec = document.querySelector('#page-sec')
       new window.EmailForm(pageSec);
     </script>
