@@ -4,11 +4,16 @@
     <meta charset="UTF-8" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
     <title>Email Form</title> 
-    <link rel="stylesheet" href="#" /> 
+    <link rel="stylesheet" href="./style.css" /> 
   </head> 
   <body> 
-    <main class="page page_centred"> 
+    <main id="page"> 
   
     </main> 
+    <script src="static/js/email-form/email-form.js"></script>
+    <script>
+      const page = document.querySelector('#page')
+      const Form = new window.EmailForm(page);
+    </script>
   </body> 
 </html> 
