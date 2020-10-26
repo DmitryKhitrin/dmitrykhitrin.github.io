@@ -6,13 +6,14 @@
     <title>Email Form</title> 
   </head> 
   <body> 
-    <main id="page"> 
-  
-    </main> 
+    <main id="page-first"> </main> 
+    <div id="page-sec"> </div>
     <script src="static/bundle.js"></script>
     <script>
-      const page = document.querySelector('#page')
+      const page = document.querySelector('#page-first')
       const Form = new window.EmailForm(page);
+      const pageSec = document.querySelector('#page-sec')
+      new window.EmailForm(pageSec);
     </script>
   </body> 
 </html> 

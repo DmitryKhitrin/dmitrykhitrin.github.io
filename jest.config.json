@@ -1,0 +1,10 @@
+{
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "transform": {
+        "\\.handlebars$": "jest-raw-loader"
+    },
+    "moduleNameMapper": {
+        "\\.scss$": "identity-obj-proxy"
+    }
+}

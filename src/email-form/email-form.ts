@@ -1,4 +1,5 @@
 import {bemCn} from '../helpers/bem-cn';
+import {EventBus} from '../helpers/event-bus';
 
 const ENTER_KEY_CODE = 13;
 const ENTER_BUTTON = 'Enter';
@@ -11,14 +12,25 @@ type Email = {
     displayedValue: string;
 };
 
+type Settings = {
+    maxLenght: number;
+};
+
 const cn = bemCn('email-form');
 export class EmailForm {
+    static EVENTS = {
+        MAIL_WASA: 'mail:was-add',
+        MAIL_WASR: 'mail:was-removed',
+    };
+
     private DOMList: HTMLElement | null = null;
     private DOMInput: HTMLInputElement | null = null;
     private root: HTMLElement | null = null;
     private emailsList: Email[] = [];
+    private settings: Settings = {maxLenght: MAX_LENGTH};
+    eventBus: EventBus;
 
-    constructor(root: HTMLElement) {
+    constructor(root: HTMLElement, settings?: Settings) {
         this.root = root;
         root.classList.add(cn());
         this.DOMList = document.createElement('div');
@@ -27,6 +39,11 @@ export class EmailForm {
         this.DOMInput.placeholder = 'add more people…';
         this.root.appendChild(this.DOMList);
         this.DOMList.appendChild(this.DOMInput);
+        this.settings = {
+            ...this.settings,
+            ...settings,
+        };
+        this.eventBus = new EventBus();
         this.addEvents();
     }
     private getEmailsList = () => {
@@ -39,7 +56,7 @@ export class EmailForm {
     };
 
     private getMailObject = (text: string): Email => {
-        const displayedValue = text.length <= MAX_LENGTH ? text : text.slice(0, 50);
+        const displayedValue = text.length <= this.settings.maxLenght ? text : `${text.slice(0, 47)}...`;
         return {
             value: text,
             displayedValue,
@@ -52,6 +69,7 @@ export class EmailForm {
             const emailsList = this.getEmailsList();
             const newEmail = Array.isArray(email) ? email.map(this.getMailObject) : [this.getMailObject(email)];
             this.setNewList([...emailsList, ...newEmail]);
+            this.eventBus.emit(EmailForm.EVENTS.MAIL_WASA);
         }
     };
 
@@ -72,6 +90,7 @@ export class EmailForm {
 
     private addEvents = () => {
         const input = this.DOMInput;
+        let isKeyEvent = false;
 
         if (input) {
             const setValuseFromEvent = () => {
@@ -79,23 +98,23 @@ export class EmailForm {
                 const values = clearedValue.split(',').filter((val) => val);
                 input.value = '';
                 this.addEmail(values);
-                input.focus();
             };
 
             input.addEventListener('keyup', (event) => {
-                event.preventDefault();
                 if (this.isEnterKey(event)) {
+                    isKeyEvent = true;
                     setValuseFromEvent();
+                    isKeyEvent = false;
+                    event.preventDefault();
                 }
             });
 
-            // input.addEventListener('blur', (event) => {
-            //     event.preventDefault();
-            //     if (!isKeyEvent) {
-            //         setValuseFromEvent();
-            //     }
-            //     isKeyEvent = false;
-            // });
+            input.addEventListener('focusout', (event) => {
+                if (!isKeyEvent) {
+                    setValuseFromEvent();
+                    event.preventDefault();
+                }
+            });
         }
     };
 
@@ -103,6 +122,21 @@ export class EmailForm {
         const emailList = this.getEmailsList();
         const newEmailsList = emailList.filter((_, i) => i !== index);
         this.setNewList(newEmailsList);
+        this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR);
+    };
+
+    private createListItem = (text: string, isValid: boolean, index: number) => {
+        const p = document.createElement('p');
+        p.className = cn('list-item', {isValid});
+        p.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
+        const cross = p.querySelector('span');
+        if (cross) {
+            cross.addEventListener('click', () => {
+                this.onRemove(index);
+                return false;
+            });
+        }
+        return p;
     };
 
     private render = () => {
@@ -112,22 +146,22 @@ export class EmailForm {
             domList.innerHTML = '';
             const emails = this.getEmailsList();
             emails.forEach(({displayedValue, isValid}, index) => {
-                console.log(isValid);
-                const p = document.createElement('p');
-                console.log(isValid);
-                p.className = cn('list-item', {isValid});
-                p.innerHTML = ''.concat(displayedValue, ' <span class="_cross" >&times;</span>');
-                const cross = p.querySelector('span');
-                if (cross) {
-                    cross.addEventListener('click', () => {
-                        this.onRemove(index);
-                        return false;
-                    });
-                }
+                const p = this.createListItem(displayedValue, isValid, index);
                 domList.appendChild(p);
             });
             domList.appendChild(domInput);
-            console.log(12);
+        }
+    };
+
+    public emailWasAdded = (func?: Function) => {
+        if (func) {
+            this.eventBus.on(EmailForm.EVENTS.MAIL_WASA, func);
+        }
+    };
+
+    public emailWasRemoved = (func?: Function) => {
+        if (func) {
+            this.eventBus.on(EmailForm.EVENTS.MAIL_WASR, func);
         }
     };
 }

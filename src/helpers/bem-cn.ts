@@ -36,9 +36,7 @@ export const bemCn = (blockName: string) => (elemNameOrState?: string | State, o
     if (state) {
         Object.keys(state).forEach((key) => {
             const value = state[key];
-            console.log(value);
             const convertedKey = convertCamelCaseToKebabCase(key);
-
             if (value === true) {
                 className += ` _${convertedKey}`;
             } else if (value === 0 || value) {
