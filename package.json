@@ -5,10 +5,32 @@
     "main": "index.js",
     "dependencies": {},
     "devDependencies": {
+        "autoprefixer": "10.0.1",
+        "cssnano": "4.1.10",
+        "node-sass-package-importer": "5.3.2",
+        "nodemon": "2.0.6",
+        "npm-run-all": "4.1.5",
+        "postcss": "8.1.4",
+        "postcss-cli": "8.1.0",
+        "postcss-node-sass": "2.1.8",
+        "postcss-safe-parser": "5.0.2",
         "typescript": "4.0.3"
     },
     "scripts": {
-        "build": "tsc"
+        "build:ts": "tsc",
+        "build:scss": "postcss src/styles/main.scss -o static/styles/main.css",
+        "build": "npm-run-all build:ts build:scss",
+        "watch:scss": "npm run build:scss -- --watch",
+        "start:dev": "npm-run-all --parallel watch:ts watch:scss watch:server",
+        "server": "ts-node server.ts",
+        "watch:server": "nodemon --dev",
+        "prebuild:ts": "npm run clean:scripts",
+        "watch:ts": "npm run build:ts -- --watch",
+        "prebuild:scss": "npm run clean:styles",
+        "clean:scripts": "rm -rf static/scripts",
+        "clean:styles": "rimraf static/styles",
+        "clean": "npm-run-all clean:scripts clean:styles",
+        "lint": "eslint . --ext .ts"
     },
     "repository": {
         "type": "git",

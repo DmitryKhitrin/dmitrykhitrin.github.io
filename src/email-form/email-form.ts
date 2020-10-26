@@ -15,7 +15,7 @@ class EmailForm {
 
     constructor(root: HTMLElement) {
         this.root = root;
-        root.classList.add('simple-tags');
+        root.classList.add('email-form');
         this.DOMList = document.createElement('ul');
         this.DOMInput = document.createElement('input');
         this.root.appendChild(this.DOMList);
@@ -26,12 +26,7 @@ class EmailForm {
         return this.emailsList;
     };
 
-    private removeAll = () => {
-        this.emailsList = [];
-    };
-
     private setNewList = (emails: Email[]) => {
-        this.removeAll();
         this.emailsList = emails;
         this.render();
     };
@@ -96,6 +91,7 @@ class EmailForm {
             emails.forEach(({text, isValid}, index) => {
                 console.log(isValid);
                 const li = document.createElement('li');
+                li.classList.add(isValid ? '_valid' : '_invalid');
                 li.innerHTML = ''.concat(text, ' <a>&times;</a>');
                 const cross = li.querySelector('a');
                 if (cross) {
