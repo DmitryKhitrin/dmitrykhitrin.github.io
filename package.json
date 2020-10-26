@@ -21,15 +21,8 @@
         "build:scss": "postcss src/styles/main.scss -o static/styles/main.css",
         "build": "npm-run-all build:ts build:scss",
         "watch:scss": "npm run build:scss -- --watch",
-        "start:dev": "npm-run-all --parallel watch:ts watch:scss watch:server",
-        "server": "ts-node server.ts",
-        "watch:server": "nodemon --dev",
-        "prebuild:ts": "npm run clean:scripts",
+        "start:dev": "npm-run-all --parallel watch:ts watch:scss",
         "watch:ts": "npm run build:ts -- --watch",
-        "prebuild:scss": "npm run clean:styles",
-        "clean:scripts": "rm -rf static/scripts",
-        "clean:styles": "rimraf static/styles",
-        "clean": "npm-run-all clean:scripts clean:styles",
         "lint": "eslint . --ext .ts"
     },
     "repository": {

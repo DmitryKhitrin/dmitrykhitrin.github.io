@@ -1,12 +1,24 @@
 {
     "compilerOptions": {
-        "rootDir": "src/",
-        "outDir": "static/js/",
-        "target": "es2016",
+        // Basic Options
+        "target": "es6",
+        "module": "es6",
+        "lib": ["es2016", "dom", "es5"],
+        "outDir": "static/scripts",
+
+        // Module Resolution Options
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+
+        "noImplicitAny": false,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "strictNullChecks": true,
         "alwaysStrict": true,
-        "strict": true
-    }
+        "sourceMap": true,
+        "strictNullChecks": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "static", "src/__*/**/*"]
 }

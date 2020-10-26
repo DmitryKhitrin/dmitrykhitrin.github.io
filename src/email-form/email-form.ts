@@ -8,7 +8,7 @@ type Email = {
 };
 
 class EmailForm {
-    private DOMList: HTMLUListElement | null = null;
+    private DOMList: HTMLElement | null = null;
     private DOMInput: HTMLInputElement | null = null;
     private root: HTMLElement | null = null;
     private emailsList: Email[] = [];
@@ -16,11 +16,13 @@ class EmailForm {
     constructor(root: HTMLElement) {
         this.root = root;
         root.classList.add('email-form');
-        this.DOMList = document.createElement('ul');
+        this.DOMList = document.createElement('div');
+        this.DOMList.classList.add('_emails-list');
         this.DOMInput = document.createElement('input');
+        this.DOMInput.placeholder = 'add more people…';
         this.root.appendChild(this.DOMList);
-        this.root.appendChild(this.DOMInput);
-        this.addKeyUpEvent();
+        this.DOMList.appendChild(this.DOMInput);
+        this.addEvents();
     }
     private getEmailsList = () => {
         return this.emailsList;
@@ -41,9 +43,7 @@ class EmailForm {
     private addEmail = (email?: string | string[]) => {
         if (email) {
             const emailsList = this.getEmailsList();
-            const newEmail = Array.isArray(email)
-                ? email.map(this.getMailObject)
-                : [this.getMailObject(email)];
+            const newEmail = Array.isArray(email) ? email.map(this.getMailObject) : [this.getMailObject(email)];
             this.setNewList([...emailsList, ...newEmail]);
         }
     };
@@ -63,17 +63,34 @@ class EmailForm {
         return false;
     };
 
-    private addKeyUpEvent = () => {
+    private addEvents = () => {
         const input = this.DOMInput;
+        let isKeyEvent = false;
+
         if (input) {
-            input.addEventListener('keyup', (event) => {
+            const setValuseFromEvent = () => {
                 const clearedValue = input.value.trim();
+                const values = clearedValue.split(',').filter((val) => val);
+                input.value = '';
+                this.addEmail(values);
+                input.focus();
+            };
+
+            input.addEventListener('keyup', (event) => {
+                event.preventDefault();
                 if (this.isEnterKey(event)) {
-                    input.value = '';
-                    const value = clearedValue.split(',');
-                    this.addEmail(value);
+                    isKeyEvent = true;
+                    setValuseFromEvent();
                 }
             });
+
+            // input.addEventListener('blur', (event) => {
+            //     event.preventDefault();
+            //     if (!isKeyEvent) {
+            //         setValuseFromEvent();
+            //     }
+            //     isKeyEvent = false;
+            // });
         }
     };
 
@@ -85,23 +102,26 @@ class EmailForm {
 
     private render = () => {
         const domList = this.DOMList;
-        if (domList) {
+        const domInput = this.DOMInput;
+        if (domList && domInput) {
             domList.innerHTML = '';
             const emails = this.getEmailsList();
             emails.forEach(({text, isValid}, index) => {
                 console.log(isValid);
-                const li = document.createElement('li');
-                li.classList.add(isValid ? '_valid' : '_invalid');
-                li.innerHTML = ''.concat(text, ' <a>&times;</a>');
-                const cross = li.querySelector('a');
+                const p = document.createElement('p');
+                p.classList.add('_list-item');
+                p.classList.add(isValid ? '_valid' : '_invalid');
+                p.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
+                const cross = p.querySelector('span');
                 if (cross) {
                     cross.addEventListener('click', () => {
                         this.onRemove(index);
                         return false;
                     });
                 }
-                domList.appendChild(li);
+                domList.appendChild(p);
             });
+            domList.appendChild(domInput);
         }
     };
 }
