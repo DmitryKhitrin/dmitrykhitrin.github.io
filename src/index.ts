@@ -1,4 +1,4 @@
-import {EmailForm} from './email-form';
+import {TagForm} from './email-form';
 
 // @ts-ignore
-window.EmailForm = EmailForm;
+window.TagForm = TagForm;

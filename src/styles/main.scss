@@ -1,6 +1,6 @@
 $primary-color: rgba(102, 153, 255, 0.2);
 
-.email-form {
+.tag-form {
     border: 1px solid #c3c2cf;
     box-sizing: border-box;
     padding: 0em 0.5em;
@@ -12,7 +12,7 @@ $primary-color: rgba(102, 153, 255, 0.2);
     flex-direction: column;
     background-color: white;
 
-    &__emails-list {
+    &__records-list {
         padding: 0;
         margin: 0;
         display: flex;

@@ -2,7 +2,7 @@
 
 ## Description
 
-Email Tag Forn - Test task representing a tag form for email addresses
+Email Tag Form - Test task representing a tag form.
 
 ## How to build project
 
@@ -20,7 +20,7 @@ Email Tag Forn - Test task representing a tag form for email addresses
 <body>
     <div id="form"> </div>
     <script src="static/bundle.js"></script>
-    <script>const page = document.querySelector('#form'); const Form = new EmailForm(page);</script>
+    <script>const page = document.querySelector('#form'); const Form = new TagForm(page);</script>
 </body>
 ```
 
@@ -31,20 +31,24 @@ In order to use this form, you need to:
 
 ## Available methods
 
--   `EmailForm.setNewList` - clears the list and draws the new one passed to it.
+-   `TagForm.setNewList` - clears the list and draws the new one passed to it.
 
 ```js
-// Email format
-const emails = string[];
+// Record format
+const record = string[];
+const settings = {
+    maxLenght: number; - // max length of displayed value
+    validationRegExp: RegExp; - // validation regExp (email is Default)
+}
 ```
 
--   `EmailForm.getValidEmailsCount` - returns the number of valid email.
+-   `TagForm.getValidRecordsCount` - returns the number of valid records.
 
--   `EmailForm.clearAll` - completely cleans the form.
+-   `TagForm.clearAll` - completely cleans the form.
 
--   `EmailForm.emailWasRemoved` - called after mail has been deleted returns the deleted message.
+-   `TagForm.recordWasRemoved` - called after mail has been deleted returns the deleted message.
 
--   `EmailForm.emailWasAdded` - called after mail has been added and returns the added message.
+-   `TagForm.recordWasAdded` - called after mail has been added and returns the added message.
 
 ```js
 const Form = new EmailForm(container);
@@ -52,8 +56,8 @@ const callback = () => {};
 Form.emailWasAdded(callback);
 ```
 
--   `EmailForm.getValidEmails` - returns only valid form's records.
+-   `TagForm.getValidRecords` - returns only valid form's records.
 
--   `EmailForm.getAllRecords` - returns all records.
+-   `TagForm.getAllRecords` - returns all records.
 
--   `EmailForm.getRecordsCount` - returns the number of records in the form..
+-   `TagForm.getRecordsCount` - returns the number of records in the form..

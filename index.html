@@ -26,8 +26,8 @@
     <script src="static/bundle.js"></script>
     <script>
       const page = document.querySelector('#form');
-      const form = new EmailForm(page);
-      document.querySelector('.add-btn').addEventListener('click', () => form.addEmail(`${Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6)}@test.ru`));
+      const form = new TagForm(page);
+      document.querySelector('.add-btn').addEventListener('click', () => form.addRecord(`${Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6)}@test.ru`));
       document.querySelector('.clear-all').addEventListener('click', () => form.clearAll());
       document.querySelector('.get-email').addEventListener('click', () => {
         const validEmails = form.getValidRecordsCount();

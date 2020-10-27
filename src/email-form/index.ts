@@ -1,1 +1,1 @@
-export {EmailForm} from './email-form';
+export {TagForm} from './tag-form';
