@@ -1,0 +1,29 @@
+{
+    "env": {
+        "es6": true,
+        "browser": true,
+        "commonjs": true,
+        "jest": true
+    },
+    "plugins": ["@typescript-eslint"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-vars": [0],
+        "react/prop-types": [0],
+        "@typescript-eslint/explicit-function-return-type": [0],
+        "@typescript-eslint/no-use-before-define": [0]
+    },
+    "settings": {
+        "react": {
+            "version": "16"
+        },
+        "import/resolver": {
+            "node": {
+                "paths": ["./"]
+            }
+        }
+    }
+}
