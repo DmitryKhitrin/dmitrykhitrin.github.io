@@ -3,17 +3,34 @@
   <head> 
     <meta charset="UTF-8" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css"> 
     <title>Email Form</title> 
   </head> 
-  <body> 
-    <main id="page-first"> </main> 
-    <div id="page-sec"> </div>
+  <body>
+    <main class="main">
+      <section class="form-modal">
+        <div class="form-container">
+          <span class="title">Share <strong>Board name</strong> with others</span>
+          <div id="form"> </div>
+        </div>
+
+        <div class="buttons-wrapper">
+          <button type="button" class="btn add-btn">Add Email</button>
+          <button type="button" class="btn get-email">Get Emails Count</button>
+        </div>
+      </section>
+      
+    </main>
+    
     <script src="static/bundle.js"></script>
     <script>
-      const page = document.querySelector('#page-first');
-      document.myForm = new EmailForm(page);
-      const pageSec = document.querySelector('#page-sec')
-      new window.EmailForm(pageSec);
+      const page = document.querySelector('#form');
+      const form = new EmailForm(page);
+      document.querySelector('.add-btn').addEventListener('click', () => form.addEmail(`${Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6)}@test.ru`));
+      document.querySelector('.get-email').addEventListener('click', () => {
+        const validEmails = form.getValidRecordsCount();
+        alert(`Valid emails count ${validEmails}`);
+      });
     </script>
   </body> 
 </html> 

@@ -3,7 +3,6 @@ $primary-color: rgba(102, 153, 255, 0.2);
 .email-form {
     border: 1px solid #c3c2cf;
     box-sizing: border-box;
-    margin: 1em;
     padding: 0em 0.5em;
     display: flex;
     flex-wrap: wrap;
@@ -11,6 +10,7 @@ $primary-color: rgba(102, 153, 255, 0.2);
     border-radius: 5px;
     overflow: hidden;
     flex-direction: column;
+    background-color: white;
 
     &__emails-list {
         padding: 0;

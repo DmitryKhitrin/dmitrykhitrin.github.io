@@ -178,4 +178,8 @@ export class EmailForm {
     public addEmail = (value: string) => {
         this._addEmail(value);
     };
+
+    public clearAll = () => {
+        this._setNewList([], true);
+    };
 }
