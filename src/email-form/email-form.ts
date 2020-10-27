@@ -1,8 +1,7 @@
 import {bemCn} from '../helpers/bem-cn';
 import {EventBus} from '../helpers/event-bus';
+import {isEnterKey} from '../helpers/is-enter-key';
 
-const ENTER_KEY_CODE = 13;
-const ENTER_BUTTON = 'Enter';
 const MAX_LENGTH = 50;
 const EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
@@ -23,85 +22,66 @@ export class EmailForm {
         MAIL_WASR: 'mail:was-removed',
     };
 
-    private DOMList: HTMLElement | null = null;
-    private DOMInput: HTMLInputElement | null = null;
-    private root: HTMLElement | null = null;
-    private emailsList: Email[] = [];
-    private settings: Settings = {maxLenght: MAX_LENGTH};
+    private _DOMList: HTMLElement | null = null;
+    private _DOMInput: HTMLInputElement | null = null;
+    private _root: HTMLElement | null = null;
+    private _recordsList: Email[] = [];
+    private _settings: Settings = {maxLenght: MAX_LENGTH};
     eventBus: EventBus;
 
-    constructor(root: HTMLElement, settings?: Settings) {
-        this.root = root;
+    constructor(root: HTMLElement, _settings?: Settings) {
         root.classList.add(cn());
-        this.DOMList = document.createElement('div');
-        this.DOMList.classList.add(cn('emails-list'));
-        this.DOMInput = document.createElement('input');
-        this.DOMInput.placeholder = 'add more people…';
-        this.root.appendChild(this.DOMList);
-        this.DOMList.appendChild(this.DOMInput);
-        this.settings = {
-            ...this.settings,
-            ...settings,
+        this._root = root;
+        this._DOMList = document.createElement('div');
+        this._DOMList.classList.add(cn('emails-list'));
+        this._DOMInput = document.createElement('input');
+        this._DOMInput.placeholder = 'add more people…';
+        this._root.appendChild(this._DOMList);
+        this._DOMList.appendChild(this._DOMInput);
+        this._settings = {
+            ...this._settings,
+            ..._settings,
         };
         this.eventBus = new EventBus();
         this.addEvents();
     }
-    private getEmailsList = () => {
-        return this.emailsList;
+    private _getEmailsList = () => {
+        return this._recordsList;
     };
 
-    private processMails = (emails) => {
-        return Array.isArray(emails) ? emails.map(this.getMailObject) : [this.getMailObject(emails)];
+    private _processRecords = (reocrds) => {
+        return Array.isArray(reocrds) ? reocrds.map(this._getFormRecord) : [this._getFormRecord(reocrds)];
     };
 
-    public setNewList = (emails: Email[]) => {
-        this.emailsList = this.processMails(emails);
-        this.render();
-    };
-
-    public getValidEmailsCount = () => {
-        return this.getEmailsList().reduce((acc, mail) => (acc += Number(mail.isValid)), 0);
-    };
-
-    private getMailObject = (email: string | Email): Email => {
-        if (typeof email !== 'object') {
-            const text = String(email);
-            const displayedValue = text.length <= this.settings.maxLenght ? text : `${text.slice(0, 47)}...`;
+    private _getFormRecord = (record: string | Email): Email => {
+        if (typeof record !== 'object') {
+            const text = String(record);
+            const displayedValue = text.length <= this._settings.maxLenght ? text : `${text.slice(0, 47)}...`;
             return {
                 value: text,
                 displayedValue,
                 isValid: EMAIL_REGEXP.test(text.toLowerCase()),
             };
         }
-        return email;
+        return record;
     };
 
-    private addEmail = (email?: string | string[]) => {
-        if (email) {
-            const emailsList = this.getEmailsList();
-            const newEmail = this.processMails(email);
-            this.setNewList([...emailsList, ...newEmail]);
+    private _addEmail = (records?: string | string[]) => {
+        if (records) {
+            const emailsList = this._getEmailsList();
+            const newEmail = this._processRecords(records);
+            this._setNewList([...emailsList, ...newEmail]);
             this.eventBus.emit(EmailForm.EVENTS.MAIL_WASA);
         }
     };
 
-    public getEmailsCount = () => {
-        return this.getEmailsList().length;
-    };
-
-    public addRandomEmail = () => {
-        this.addEmail('asds@asd.ru');
-    };
-
-    private isEnterKey = ({keyCode, key}: KeyboardEvent) => {
-        if (keyCode === ENTER_KEY_CODE || key === ENTER_BUTTON) {
-            return true;
-        }
-        return false;
+    private _setNewList = (records: Email[]) => {
+        this._recordsList = records;
+        this._render();
     };
 
     private addEvents = () => {
-        const input = this.DOMInput;
+        const input = this._DOMInput;
         let isKeyEvent = false;
 
         if (input) {
@@ -109,11 +89,11 @@ export class EmailForm {
                 const clearedValue = input.value.trim();
                 const values = clearedValue.split(',').filter((val) => val);
                 input.value = '';
-                this.addEmail(values);
+                this._addEmail(values);
             };
 
             input.addEventListener('keyup', (event) => {
-                if (this.isEnterKey(event)) {
+                if (isEnterKey(event)) {
                     isKeyEvent = true;
                     setValuseFromEvent();
                     isKeyEvent = false;
@@ -130,35 +110,35 @@ export class EmailForm {
         }
     };
 
-    private onRemove = (index: number) => {
-        const emailList = this.getEmailsList();
+    private _onRemove = (index: number) => {
+        const emailList = this._getEmailsList();
         const newEmailsList = emailList.filter((_, i) => i !== index);
-        this.setNewList(newEmailsList);
+        this._setNewList(newEmailsList);
         this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR);
     };
 
-    private createListItem = (text: string, isValid: boolean, index: number) => {
+    private _createListItem = (text: string, isValid: boolean, index: number) => {
         const p = document.createElement('p');
         p.className = cn('list-item', {isValid});
         p.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
         const cross = p.querySelector('span');
         if (cross) {
             cross.addEventListener('click', () => {
-                this.onRemove(index);
+                this._onRemove(index);
                 return false;
             });
         }
         return p;
     };
 
-    private render = () => {
-        const domList = this.DOMList;
-        const domInput = this.DOMInput;
+    private _render = () => {
+        const domList = this._DOMList;
+        const domInput = this._DOMInput;
         if (domList && domInput) {
             domList.innerHTML = '';
-            const emails = this.getEmailsList();
+            const emails = this._getEmailsList();
             emails.forEach(({displayedValue, isValid}, index) => {
-                const p = this.createListItem(displayedValue, isValid, index);
+                const p = this._createListItem(displayedValue, isValid, index);
                 domList.appendChild(p);
             });
             domList.appendChild(domInput);
@@ -175,5 +155,18 @@ export class EmailForm {
         if (func) {
             this.eventBus.on(EmailForm.EVENTS.MAIL_WASR, func);
         }
+    };
+
+    public setNewList = (records: Email[]) => {
+        const recordsList = this._processRecords(records);
+        this._setNewList(recordsList);
+    };
+
+    public getValidRecordsCount = () => {
+        return this._getEmailsList().reduce((acc, record) => (acc += Number(record.isValid)), 0);
+    };
+
+    public addEmail = () => {
+        this._addEmail('asds@asd.ru');
     };
 }
