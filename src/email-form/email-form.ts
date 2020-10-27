@@ -43,7 +43,7 @@ export class EmailForm {
             ..._settings,
         };
         this.eventBus = new EventBus();
-        this.addEvents();
+        this._initEvents();
     }
     private _getRecordsList = () => {
         return this._recordsList;
@@ -70,7 +70,7 @@ export class EmailForm {
         if (records) {
             const newEmail = this._processRecords(records);
             this._setNewList([...newEmail], false);
-            this.eventBus.emit(EmailForm.EVENTS.MAIL_WASA);
+            this.eventBus.emit(EmailForm.EVENTS.MAIL_WASA, newEmail);
         }
     };
 
@@ -78,12 +78,11 @@ export class EmailForm {
         const domList = this._DOMList;
         if (domList) {
             this._recordsList = isRerender ? records : [...this._getRecordsList(), ...records];
-            console.log(this._recordsList);
             this._render(records, isRerender);
         }
     };
 
-    private addEvents = () => {
+    private _initEvents = () => {
         const input = this._DOMInput;
         let isKeyEvent = false;
 
@@ -144,7 +143,7 @@ export class EmailForm {
             const addFuncton = isRerender
                 ? (el) => domList.appendChild(el)
                 : (el) => domList.insertBefore(el, domInput);
-            console.log(domInput.parentElement);
+
             emails.forEach(({displayedValue, isValid}, index) => {
                 const p = this._createListItem(displayedValue, isValid, index);
                 addFuncton(p);
@@ -176,7 +175,7 @@ export class EmailForm {
         return this._getRecordsList().reduce((acc, record) => (acc += Number(record.isValid)), 0);
     };
 
-    public addEmail = () => {
-        this._addEmail('asds@asd.ru');
+    public addEmail = (value: string) => {
+        this._addEmail(value);
     };
 }
