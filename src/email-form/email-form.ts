@@ -179,6 +179,10 @@ export class EmailForm {
         this._addEmail(value);
     };
 
+    public getRecordsCount = () => {
+        return this._getRecordsList().length;
+    };
+
     public clearAll = () => {
         this._setNewList([], true);
     };

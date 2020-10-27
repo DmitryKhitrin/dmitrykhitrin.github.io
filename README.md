@@ -40,6 +40,8 @@ const emails = string[];
 
 -   `EmailForm.getValidEmailsCount` - returns the number of valid email.
 
+-   `EmailForm.clearAll` - completely cleans the form.
+
 -   `EmailForm.emailWasRemoved` - called after mail has been deleted returns the deleted message.
 
 -   `EmailForm.emailWasAdded` - called after mail has been added and returns the added message.
