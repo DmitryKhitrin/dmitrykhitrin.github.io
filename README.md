@@ -1,20 +1,20 @@
-Email Tag Form
+# Email Tag Form
 
 ## Description
 
 Email Tag Forn - Test task representing a tag form for email addresses
 
-# How to build project
+## How to build project
 
-1. npm i
-2. npm run build:production
+1. `npm i`
+2. `npm run build:production`
 
 ## How to launch tests
 
-1. npm i
-2. npm run test
+1. `npm i`
+2. `npm run test`
 
-# Usage
+## Usage
 
 ```js
 <body>
@@ -26,10 +26,10 @@ Email Tag Forn - Test task representing a tag form for email addresses
 
 In order to use this form, you need to:
 
-1. Load script from 'static / bundle.js'.
-2. Create an instance of the EmailForm.
+1. `Load script from 'static / bundle.js'.`
+2. `Create an instance of the EmailForm.`
 
-# Available methods
+## Available methods
 
 -   `EmailForm.setNewList` - clears the list and draws the new one passed to it.
 
