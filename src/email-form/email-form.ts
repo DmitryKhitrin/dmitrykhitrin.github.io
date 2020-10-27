@@ -82,6 +82,9 @@ export class EmailForm {
         }
     };
 
+    /**
+     * @description Initialization form events.
+     */
     private _initEvents = () => {
         const input = this._DOMInput;
         let isKeyEvent = false;
@@ -166,25 +169,56 @@ export class EmailForm {
         }
     };
 
+    /**
+     *
+     * @description Fills the form with new elements.
+     */
     public setNewList = (records: Email[]) => {
         const recordsList = this._processRecords(records);
         this._setNewList(recordsList, true);
     };
 
+    /**
+     * @description Return only valud records count.
+     */
     public getValidRecordsCount = () => {
         return this._getRecordsList().reduce((acc, record) => (acc += Number(record.isValid)), 0);
     };
 
+    /**
+     *
+     * @description Lets you add a record to the form.
+     */
     public addEmail = (value: string) => {
         this._addEmail(value);
     };
 
+    /**
+     * @description Returns the number of records in the form.
+     */
     public getRecordsCount = () => {
         return this._getRecordsList().length;
     };
 
+    /**
+     * @description Cleans the form completely.
+     */
     public clearAll = () => {
         this._setNewList([], true);
         this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR, []);
+    };
+
+    /**
+     * @description returns only valid records.
+     */
+    public getValidEmails = () => {
+        this._getRecordsList().filter((record) => record.isValid);
+    };
+
+    /**
+     * @description Returns all records.
+     */
+    public getAllRecords = () => {
+        this._getRecordsList();
     };
 }
