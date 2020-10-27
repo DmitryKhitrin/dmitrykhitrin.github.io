@@ -121,17 +121,17 @@ export class EmailForm {
     };
 
     private _createListItem = (text: string, isValid: boolean, index: number) => {
-        const p = document.createElement('p');
-        p.className = cn('list-item', {isValid});
-        p.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
-        const cross = p.querySelector('span');
+        const listItem = document.createElement('p');
+        listItem.className = cn('list-item', {isValid});
+        listItem.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
+        const cross = listItem.querySelector('span');
         if (cross) {
             cross.addEventListener('click', () => {
                 this._onRemove(index);
                 return false;
             });
         }
-        return p;
+        return listItem;
     };
 
     private _render = (emails: Email[], isRerender?: boolean) => {
