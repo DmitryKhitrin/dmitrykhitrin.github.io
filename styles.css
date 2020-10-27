@@ -23,14 +23,13 @@ body {
 }
 
 #form {
+    /* This is done in order to show the scrollbar. */
     max-height: 200px;
 }
 
 .buttons-wrapper {
-    width: 100%;
     background-color: #ffffff;
     padding: 24px 50px;
-    max-width: 75%;
 }
 
 .form-container {
