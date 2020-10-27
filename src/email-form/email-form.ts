@@ -2,6 +2,7 @@ import {bemCn} from '../helpers/bem-cn';
 import {EventBus} from '../helpers/event-bus';
 import {isEnterKey} from '../helpers/is-enter-key';
 import {isDOM} from '../helpers/is-dom';
+import {getUniqId} from '../helpers/get-unic-id';
 
 const MAX_LENGTH = 50;
 const EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -10,6 +11,7 @@ type Email = {
     value: string;
     isValid: boolean;
     displayedValue: string;
+    id: string;
 };
 
 type Settings = {
@@ -54,6 +56,10 @@ export class EmailForm {
         return this._recordsList;
     };
 
+    private _replaceRecordsList = (recods: Email[]) => {
+        this._recordsList = recods;
+    };
+
     private _processRecords = (reocrds) => {
         return Array.isArray(reocrds) ? reocrds.map(this._createFormRecord) : [this._createFormRecord(reocrds)];
     };
@@ -66,6 +72,7 @@ export class EmailForm {
                 value: text,
                 displayedValue,
                 isValid: EMAIL_REGEXP.test(text.toLowerCase()),
+                id: getUniqId(),
             };
         }
         return record;
@@ -120,21 +127,27 @@ export class EmailForm {
         }
     };
 
-    private _onRemove = (index: number) => {
+    private _onRemove = (idForRemove: string, el: HTMLElement) => {
         const records = this._getRecordsList();
-        const newList = records.filter((_, i) => i !== index);
-        this._setNewList(newList, true);
-        this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR, newList);
+        try {
+            const newList = records.filter(({id}) => id !== idForRemove);
+            this._DOMList?.removeChild(el);
+            this._replaceRecordsList(newList);
+            this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR, newList);
+        } catch (e) {
+            throw new Error(e);
+        }
     };
 
-    private _createListItem = (text: string, isValid: boolean, index: number) => {
+    private _createListItem = (text: string, isValid: boolean, id: string) => {
         const listItem = document.createElement('p');
         listItem.className = cn('list-item', {isValid});
         listItem.innerHTML = ''.concat(text, ' <span class="_cross" >&times;</span>');
         const cross = listItem.querySelector('span');
         if (cross) {
-            cross.addEventListener('click', () => {
-                this._onRemove(index);
+            cross.addEventListener('click', (e) => {
+                // @ts-ignore
+                this._onRemove(id, e.target.parentNode);
                 return false;
             });
         }
@@ -152,8 +165,8 @@ export class EmailForm {
                 ? (el) => domList.appendChild(el)
                 : (el) => domList.insertBefore(el, domInput);
 
-            emails.forEach(({displayedValue, isValid}, index) => {
-                const p = this._createListItem(displayedValue, isValid, index);
+            emails.forEach(({displayedValue, isValid, id}) => {
+                const p = this._createListItem(displayedValue, isValid, id);
                 addFuncton(p);
             });
             if (isRerender) {
