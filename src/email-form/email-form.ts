@@ -29,7 +29,10 @@ export class EmailForm {
     private _settings: Settings = {maxLenght: MAX_LENGTH};
     eventBus: EventBus;
 
-    constructor(root: HTMLElement, _settings?: Settings) {
+    constructor(root?: HTMLElement, _settings?: Settings) {
+        if (!root) {
+            throw new Error('Empty root element');
+        }
         root.classList.add(cn());
         this._root = root;
         this._DOMList = document.createElement('div');
