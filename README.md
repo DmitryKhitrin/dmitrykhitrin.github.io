@@ -46,6 +46,12 @@ const emails = string[];
 
 -   `EmailForm.emailWasAdded` - called after mail has been added and returns the added message.
 
+-   `EmailForm.getValidEmails` - returns only valid form's records.
+
+-   `EmailForm.getAllRecords` - returns all records.
+
+-   `EmailForm.getRecordsCount` - returns the number of records in the form..
+
 ```js
 const Form = new EmailForm(container);
 const callback = () => {};
