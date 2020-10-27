@@ -3,6 +3,7 @@ import {EventBus} from '../helpers/event-bus';
 import {isEnterKey} from '../helpers/is-enter-key';
 import {isDOM} from '../helpers/is-dom';
 import {getUniqId} from '../helpers/get-unic-id';
+import {escapeOutput} from '../helpers/prevent-xss';
 
 const MAX_LENGTH = 50;
 
@@ -71,7 +72,7 @@ export class TagForm {
 
     private _createFormRecord = (record: string | Record): Record => {
         if (typeof record !== 'object') {
-            const text = String(record);
+            const text = escapeOutput(String(record));
             const displayedValue = text.length <= this._settings.maxLenght ? text : `${text.slice(0, 47)}...`;
             return {
                 value: text,
