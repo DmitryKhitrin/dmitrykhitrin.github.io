@@ -185,5 +185,6 @@ export class EmailForm {
 
     public clearAll = () => {
         this._setNewList([], true);
+        this.eventBus.emit(EmailForm.EVENTS.MAIL_WASR, []);
     };
 }

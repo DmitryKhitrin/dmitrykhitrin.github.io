@@ -36,6 +36,7 @@ describe('EmailForm', () => {
         const callback = jest.fn();
         form.emailWasRemoved(callback);
         form.addEmail('asdasd');
+        form.clearAll();
         expect(callback).toHaveBeenCalled();
     });
 });
