@@ -5,6 +5,10 @@ import {isDOM} from '../helpers/is-dom';
 import {getUniqId} from '../helpers/get-unic-id';
 
 const MAX_LENGTH = 50;
+
+/**
+ * @description Added email regexp as default. But the correct decision on default is to leave blank.
+ */
 const MAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 type Record = {

@@ -1,4 +1,4 @@
-# Email Tag Form
+# Tag Form
 
 ## Description
 
@@ -27,7 +27,7 @@ Email Tag Form - Test task representing a tag form.
 In order to use this form, you need to:
 
 1. `Load script from 'static / bundle.js'.`
-2. `Create an instance of the EmailForm.`
+2. `Create an instance of the TagForm.`
 
 ## Available methods
 
@@ -51,9 +51,9 @@ const settings = {
 -   `TagForm.recordWasAdded` - called after mail has been added and returns the added message.
 
 ```js
-const Form = new EmailForm(container);
+const Form = new TagForm(container);
 const callback = () => {};
-Form.emailWasAdded(callback);
+Form.recordWasAdded(callback);
 ```
 
 -   `TagForm.getValidRecords` - returns only valid form's records.
