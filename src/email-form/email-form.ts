@@ -1,6 +1,7 @@
 import {bemCn} from '../helpers/bem-cn';
 import {EventBus} from '../helpers/event-bus';
 import {isEnterKey} from '../helpers/is-enter-key';
+import {isDOM} from '../helpers/is-dom';
 
 const MAX_LENGTH = 50;
 const EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -30,23 +31,24 @@ export class EmailForm {
     eventBus: EventBus;
 
     constructor(root?: HTMLElement, _settings?: Settings) {
-        if (!root) {
-            throw new Error('Empty root element');
+        if (root && isDOM(root)) {
+            root.classList.add(cn());
+            this._root = root;
+            this._DOMList = document.createElement('div');
+            this._DOMList.classList.add(cn('emails-list'));
+            this._DOMInput = document.createElement('input');
+            this._DOMInput.placeholder = 'add more people…';
+            this._root.appendChild(this._DOMList);
+            this._DOMList.appendChild(this._DOMInput);
+            this._settings = {
+                ...this._settings,
+                ..._settings,
+            };
+            this.eventBus = new EventBus();
+            this._initEvents();
+        } else {
+            throw new Error('Root is not valid DOM element.');
         }
-        root.classList.add(cn());
-        this._root = root;
-        this._DOMList = document.createElement('div');
-        this._DOMList.classList.add(cn('emails-list'));
-        this._DOMInput = document.createElement('input');
-        this._DOMInput.placeholder = 'add more people…';
-        this._root.appendChild(this._DOMList);
-        this._DOMList.appendChild(this._DOMInput);
-        this._settings = {
-            ...this._settings,
-            ..._settings,
-        };
-        this.eventBus = new EventBus();
-        this._initEvents();
     }
     private _getRecordsList = () => {
         return this._recordsList;
