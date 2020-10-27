@@ -43,6 +43,10 @@ body {
     margin-bottom: 24px;
 }
 
+.form-modal {
+    min-width: 600px;
+}
+
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
