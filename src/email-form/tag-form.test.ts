@@ -39,4 +39,16 @@ describe('EmailForm', () => {
         form.clearAll();
         expect(callback).toHaveBeenCalled();
     });
+
+    test('Should return only valid records ', () => {
+        ['aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa@asdas.ru', 'asd@asdad.com'].forEach((val) => form.addRecord(val));
+        expect(form.getValidRecords().length).toEqual(2);
+    });
+
+    test('Should return only valid records ', () => {
+        ['aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa@asdas.ru', 'asd@asdad.com', 'test', 'test2'].forEach((val) =>
+            form.addRecord(val),
+        );
+        expect(form.getAllRecords().length).toEqual(9);
+    });
 });
