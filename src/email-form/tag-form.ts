@@ -160,7 +160,7 @@ export class TagForm {
         return listItem;
     };
 
-    private _render = (Records: Record[], isRerender?: boolean) => {
+    private _render = (records: Record[], isRerender?: boolean) => {
         const domList = this._DOMList;
         const domInput = this._DOMInput;
         if (domList && domInput) {
@@ -171,7 +171,7 @@ export class TagForm {
                 ? (el) => domList.appendChild(el)
                 : (el) => domList.insertBefore(el, domInput);
 
-            Records.forEach(({displayedValue, isValid, id}) => {
+            records.forEach(({displayedValue, isValid, id}) => {
                 const p = this._createListItem(displayedValue, isValid, id);
                 addFuncton(p);
             });
@@ -236,13 +236,13 @@ export class TagForm {
      * @description returns only valid records.
      */
     public getValidRecords = () => {
-        this._getRecordsList().filter((record) => record.isValid);
+        return this._getRecordsList().filter((record) => record.isValid);
     };
 
     /**
      * @description Returns all records.
      */
     public getAllRecords = () => {
-        this._getRecordsList();
+        return this._getRecordsList();
     };
 }
